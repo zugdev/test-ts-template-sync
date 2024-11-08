@@ -38,7 +38,7 @@ jobs:
       - name: Sync branch to template
         env:
         #   GH_TOKEN: ${{ steps.get_installation_token.outputs.token }}
-          WHITELIST_FILES: ".github/workflows/build.yml,tsconfig.json"
+          WHITELIST_FILES: ".github/workflows/build.yml tsconfig.json"
           ADDITIONAL_FILES: ${{ github.event.inputs.additional_files }}
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
