@@ -57,20 +57,12 @@ jobs:
 
           # Copy whitelist files from template
           for file in $WHITELIST_FILES; do
-            if [[ -d "template-repo/$file" ]]; then
-              cp -r "template-repo/$file" "$file"
-            else
-              cp -f "template-repo/$file" "$file"
-            fi
+            cp -rf "template-repo/$file" "$file"
           done
 
           # Copy additional files from template (if any were specified)
           for file in "${additional_files[@]}"; do
-            if [[ -d "template-repo/$file" ]]; then
-              cp -r "template-repo/$file" "$file"
-            else
-              cp -f "template-repo/$file" "$file"
-            fi
+            cp -rf "template-repo/$file" "$file"
           done
 
           # Prepare a formatted file list for the PR body
