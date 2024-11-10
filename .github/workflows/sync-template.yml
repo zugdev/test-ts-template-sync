@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       additional_files:
-        description: 'Comma-separated list of additional files to sync (i.e ".github/workflows/build.yml tsconfig.json")'
+        description: 'Comma or space separated list of additional paths to sync (i.e ".github/ tsconfig.json")'
         required: false
   schedule:
     - cron: '14 0 1 * *'
@@ -30,7 +30,7 @@ jobs:
 
       - name: Sync branch to template
         env:
-          WHITELIST_FILES: ".github/workflows/build.yml tsconfig.json"
+          WHITELIST_FILES: ".husky .github"
           ADDITIONAL_FILES: ${{ github.event.inputs.additional_files }}
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
