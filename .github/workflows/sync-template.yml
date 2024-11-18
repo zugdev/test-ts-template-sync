@@ -73,9 +73,12 @@ jobs:
           git add .
           git commit -m "chore: sync template"
           
-          # Pull remote changes to prevent divergence
-          git pull --rebase origin "$branch_name"
-          git push "$original_remote" "$pr_branch"
+          # Fetch and integrate changes from the remote branch
+          git fetch origin "$pr_branch" || true
+          git rebase "origin/$pr_branch" || true
+          
+          # Push the changes to the remote repository
+          git push "$original_remote" "$pr_branch" --force-with-lease
 
           # Create PR
           gh pr create --title "Sync branch to template" --body "This pull request merges changes from the template repository, overwriting or removing the following files:${file_list}" --head "$pr_branch" --base "$branch_name"
