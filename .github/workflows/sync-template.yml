@@ -91,28 +91,29 @@ jobs:
               cp -f "template-repo/$file" "$file"
               file_list+=$'\n'"- \`${file}\`"
             else
-              echo "Removing file/directory: $file"
+              echo "Removing missing file or directory: $file"
               rm -rf "$file"
               file_list+=$'\n'"- \`${file}\` (removed)"
             fi
           done
-
-          # Add all changes
-          git add .
 
           # Check for blacklisted files and revert changes
           echo "Checking for blacklisted files..."
           for blacklisted in "${blacklist_files[@]}"; do
             if [[ -e "$blacklisted" ]]; then
               echo "Reverting blacklisted file or directory: $blacklisted"
-              git restore "$blacklisted" || rm -rf "$blacklisted"
+              git rm -rf --cached "$blacklisted" || rm -rf "$blacklisted"
             fi
           done
 
-          # Commit
+          # Clean up
+          rm -rf template-repo/
+
+          # Commit changes
+          git add .
           git commit -m "chore: sync template" || echo "No changes to commit."
 
-          # Push
+          # Push changes to the remote repository
           git push "$original_remote" "$pr_branch"
 
           # Check for existing pull requests
