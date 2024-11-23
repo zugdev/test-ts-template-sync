@@ -121,6 +121,12 @@ jobs:
           # Check for existing pull requests
           existing_pr=$(gh pr list --base "$branch_name" --head "$pr_branch" --state open --json id --jq '.[0].id')
 
+          # Include blacklist info in PR body if present
+          if [[ -n "$blacklist_list" ]]; then
+            file_list+=$'\n\n**Blacklisted Files**:'"$blacklist_list"
+          fi
+          
+          # Create or update the pull request
           if [[ -z "$existing_pr" ]]; then
             gh pr create --title "Sync branch to template" --body "This pull request merges changes from the template repository, overwriting or removing the following files:${file_list}" --head "$pr_branch" --base "$branch_name"
           else
