@@ -37,7 +37,7 @@ jobs:
           
       - name: Sync branch to template
         env:
-          GH_TOKEN: ${{ steps.get_installation_token.outputs.token }}
+          GH_TOKEN: ${{ secrets.PAT }}
           WHITELIST_FILES: ".github/ .husky/ .eslintrc .nvmrc .prettierrc .yarnrc.yml tsconfig.json"
           ADDITIONAL_FILES: ${{ github.event.inputs.additional_files }}
           BLACKLIST_FILES: ".github/workflows/deploy.yml"
