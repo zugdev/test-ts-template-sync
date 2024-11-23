@@ -53,7 +53,7 @@ jobs:
             echo "Branch $pr_branch already exists. Fetching and updating."
             git fetch origin "$pr_branch"
             git checkout "$pr_branch"
-            git rebase "origin/$pr_branch"
+            git rebase "origin/$branch_name"
           else
             echo "Creating new branch $pr_branch."
             git checkout -b "$pr_branch"
