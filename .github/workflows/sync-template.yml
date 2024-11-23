@@ -53,7 +53,7 @@ jobs:
             echo "Branch $pr_branch already exists. Fetching and updating."
             git fetch origin "$pr_branch"
             git checkout "$pr_branch"
-            git rebase "origin/$branch_name"
+            git rebase "origin/$pr_branch"
           else
             echo "Creating new branch $pr_branch."
             git checkout -b "$pr_branch"
@@ -119,7 +119,7 @@ jobs:
           git commit -m "chore: sync template" || echo "No changes to commit."
 
           # Push
-          git push --force "$original_remote" "$pr_branch" || echo "Branch already exists remotely."
+          git push "$original_remote" "$pr_branch" || echo "Branch already exists remotely."
 
           # Check for existing pull requests
           existing_pr=$(gh pr list --base "$branch_name" --head "$pr_branch" --state open --json id --jq '.[0].id')
