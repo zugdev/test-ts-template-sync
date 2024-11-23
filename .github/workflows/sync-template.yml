@@ -97,6 +97,9 @@ jobs:
             fi
           done
 
+          # Add all changes
+          git add .
+
           # Check for blacklisted files and revert changes
           echo "Checking for blacklisted files..."
           for blacklisted in "${blacklist_files[@]}"; do
@@ -107,7 +110,6 @@ jobs:
           done
 
           # Commit
-          git add .
           git commit -m "chore: sync template" || echo "No changes to commit."
 
           # Push
