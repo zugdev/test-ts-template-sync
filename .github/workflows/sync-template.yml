@@ -84,7 +84,7 @@ jobs:
             # BLACKLIST_FILES check
             skip_file=false
             for blacklisted in "${blacklist_files[@]}"; do
-              if [[ "$file" == "$blacklisted" ]]; then
+              if [[ "$file" == "$blacklisted" || "$file" == */"$blacklisted" ]]; then
                 skip_file=true
                 break
               fi
