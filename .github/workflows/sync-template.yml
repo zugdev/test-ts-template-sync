@@ -108,5 +108,7 @@ jobs:
             # Create a new pull request
             gh pr create --title "Sync branch to template" --body "This pull request merges changes from the template repository, overwriting or removing the following files:${file_list}" --head "$pr_branch" --base "$branch_name"
           else
-            echo "Pull request to sync already exists for branch $pr_branch into $branch_name. No new PR created."
+            # Update the body of the existing pull request
+            gh pr edit "$existing_pr" --body "This pull request merges changes from the template repository, overwriting or removing the following files:${file_list}"
+            echo "Updated the existing pull request #$existing_pr."
           fi
