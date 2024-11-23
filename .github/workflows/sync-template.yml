@@ -75,6 +75,7 @@ jobs:
           blacklist_files=()
           if [[ -n "$BLACKLIST_FILES" ]]; then
             IFS=',' read -r -a blacklist_files <<< "$BLACKLIST_FILES"
+            echo "Blacklist files: ${blacklist_files[@]}"
           fi
 
           # Prepare file list for the PR body and process each whitelist file
@@ -85,6 +86,7 @@ jobs:
             skip_file=false
             for blacklisted in "${blacklist_files[@]}"; do
               if [[ "$file" == "$blacklisted" || "$file" == */"$blacklisted" ]]; then
+                echo "$file matches blacklist entry $blacklisted. Skipping."
                 skip_file=true
                 break
               fi
