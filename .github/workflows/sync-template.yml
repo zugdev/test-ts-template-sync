@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT }} # Personal Access Token (PAT) with repo scope
 
       - name: Get GitHub App token
         uses: tibdex/github-app-token@v1.7.0
