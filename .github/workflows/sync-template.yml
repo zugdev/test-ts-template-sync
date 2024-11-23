@@ -76,10 +76,16 @@ jobs:
           # Prepare file list for the PR body and process each whitelist file
           file_list=""
           for file in $WHITELIST_FILES "${additional_files[@]}"; do
-            if [[ -e "template-repo/$file" ]]; then
+            if [[ -d "template-repo/$file" ]]; then
+              # Copy directory contents to avoid nesting
+              echo "Processing directory: $file"
+              mkdir -p "$file" # Ensure target directory exists
+              rsync -a --delete "template-repo/$file/" "$file/"
+              file_list+=$'\n'"- \`${file}\` (directory)"
+            elif [[ -e "template-repo/$file" ]]; then
               # Skip file if they match the blacklist
               if [[ ! " ${blacklist_files[@]} " =~ " ${file} " ]]; then
-                cp -rf "template-repo/$file" "$file"
+                cp -f "template-repo/$file" "$file"
                 file_list+=$'\n'"- \`${file}\`"
               else
                 echo "Skipping blacklisted file: $file"
@@ -96,8 +102,8 @@ jobs:
 
           # Commit
           git add .
-          git commit -m "chore: sync template"
-          
+          git commit -m "chore: sync template" || echo "No changes to commit."
+
           # Push
           git push "$original_remote" "$pr_branch"
 
