@@ -81,23 +81,6 @@ jobs:
           # Prepare file list for the PR body and process each whitelist file
           file_list=""
           for file in "${whitelist_files[@]}" "${additional_files[@]}"; do
-
-            # BLACKLIST_FILES check
-            skip_file=false
-            for blacklisted in "${blacklist_files[@]}"; do
-              echo "Checking if $file matches blacklist entry $blacklisted..."
-              if [[ "$file" == "$blacklisted" || "$file" == */"$blacklisted" ]]; then
-                echo "$file matches blacklist entry $blacklisted. Skipping."
-                skip_file=true
-                break
-              fi
-            done
-            if [[ "$skip_file" == true ]]; then
-              echo "Skipping blacklisted file: $file"
-              continue
-            fi
-
-            # Process files
             if [[ -d "template-repo/$file" ]]; then
               echo "Processing directory: $file"
               mkdir -p "$file"
@@ -114,12 +97,18 @@ jobs:
             fi
           done
 
-          # Clean up
-          rm -rf template-repo/
+          # Check for blacklisted files and revert changes
+          echo "Checking for blacklisted files..."
+          for blacklisted in "${blacklist_files[@]}"; do
+            if [[ -e "$blacklisted" ]]; then
+              echo "Reverting blacklisted file or directory: $blacklisted"
+              git restore "$blacklisted" || rm -rf "$blacklisted"
+            fi
+          done
 
           # Commit
           git add .
-          git commit -m "chore: sync template"
+          git commit -m "chore: sync template" || echo "No changes to commit."
 
           # Push
           git push "$original_remote" "$pr_branch"
