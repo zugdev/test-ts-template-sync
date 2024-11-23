@@ -80,14 +80,14 @@ jobs:
               # Skip file if they match the blacklist
               if [[ ! " ${blacklist_files[@]} " =~ " ${file} " ]]; then
                 cp -rf "template-repo/$file" "$file"
-                file_list+="\n- \`${file}\`"
+                file_list+=$'\n'"- \`${file}\`"
               else
                 echo "Skipping blacklisted file: $file"
               fi
             else
-              # Remove file from destination if not in template
+              # Remove whitelisted file from destination if it doesn't exist in template
               rm -rf "$file"
-              file_list+="\n- \`${file}\` (removed)"
+              file_list+=$'\n'"- \`${file}\` (removed)"
             fi
           done
 
