@@ -104,7 +104,7 @@ jobs:
           for blacklisted in "${blacklist_files[@]}"; do
             if [[ -e "$blacklisted" ]]; then
               echo "Reverting blacklisted file or directory: $blacklisted"
-              git rm -rf --cached "$blacklisted" || rm -rf "$blacklisted"
+              git restore "$blacklisted"
             fi
           done
 
