@@ -61,7 +61,7 @@ jobs:
             git checkout -b "$pr_branch"
           fi
 
-          git clone https://github.com/zugdev/ts-template template-repo
+          git clone https://github.com/ubiquity/ts-template template-repo
 
           # Convert WHITELIST_FILES to array
           whitelist_files=()
