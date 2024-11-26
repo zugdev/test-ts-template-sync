@@ -42,7 +42,7 @@ jobs:
           GH_TOKEN: ${{ steps.get_installation_token.outputs.token }}
           WHITELIST_FILES: ".github/ .husky/ .eslintrc .nvmrc .prettierrc .yarnrc.yml tsconfig.json"
           ADDITIONAL_FILES: ${{ github.event.inputs.additional_files }}
-          BLACKLIST_FILES: ""
+          BLACKLIST_FILES: ".github/workflows/sync-template.yml"
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
           original_remote=$(git remote get-url origin)
@@ -61,7 +61,7 @@ jobs:
             git checkout -b "$pr_branch"
           fi
 
-          git clone https://github.com/ubiquity/ts-template template-repo
+          git clone https://github.com/zugdev/ts-template template-repo
 
           # Convert WHITELIST_FILES to array
           whitelist_files=()
@@ -117,7 +117,7 @@ jobs:
 
           # Push changes to the remote repository
           git push "$original_remote" "$pr_branch"
-          
+
           # Check for existing pull requests
           existing_pr=$(gh pr list --base "$branch_name" --head "$pr_branch" --state open --json id --jq '.[0].id')
 
