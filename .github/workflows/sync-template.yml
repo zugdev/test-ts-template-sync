@@ -116,6 +116,9 @@ jobs:
           git add .
           git commit -m "chore: sync template" || echo "No changes to commit."
 
+          # Pull to sync
+          git pull
+          
           # Push changes to the remote repository
           git push "$original_remote" "$pr_branch"
 
