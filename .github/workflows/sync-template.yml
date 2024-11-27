@@ -116,20 +116,8 @@ jobs:
           git add .
           git commit -m "chore: sync template" || echo "No changes to commit."
 
-          # Pull latest changes from the remote branch to avoid being behind
-          echo "Fetching the latest changes from the remote branch..."
-          git fetch origin "$pr_branch"
-
-          # Rebase the local branch with the latest changes from the remote branch
-          echo "Rebasing local branch with remote changes..."
-          git rebase origin/"$pr_branch" || {
-            echo "Rebase failed due to conflicts. Aborting rebase and attempting to resolve conflicts..."
-            git rebase --abort
-            exit 1
-          }
-
           # Push changes to the remote repository
-          git push "$original_remote" "$pr_branch"
+          git push "$original_remote" "$pr_branch" --force
 
           # Check for existing pull requests
           existing_pr=$(gh pr list --base "$branch_name" --head "$pr_branch" --state open --json id --jq '.[0].id')
